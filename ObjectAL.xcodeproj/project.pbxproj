@@ -364,6 +364,7 @@
 		8CE86DEE15F8D9420060E004 /* vu-needle.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE86DCB15F8D9420060E004 /* vu-needle.png */; };
 		8CE86DEF15F8D9420060E004 /* vu-shell.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE86DCC15F8D9420060E004 /* vu-shell.png */; };
 		8CE86DF215F8D9620060E004 /* IntroLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE86DF115F8D9620060E004 /* IntroLayer.m */; };
+		B32E326E16C9E3E30032E7E8 /* ObjectALConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 3914D8D6147D58F00010C4A2 /* ObjectALConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1527,6 +1528,7 @@
 				394AF5F516127B210083B392 /* SynthesizeSingleton.h in Headers */,
 				394AF5F616127B210083B392 /* OALSimpleAudio.h in Headers */,
 				394AF5F716127B210083B392 /* ObjectAL.h in Headers */,
+				B32E326E16C9E3E30032E7E8 /* ObjectALConfig.h in Headers */,
 				394AF5D716127B210083B392 /* OALAction+Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
