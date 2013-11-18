@@ -102,15 +102,24 @@
 		OAL_LOG_DEBUG(@"%@: Init with %d sources", self, reservedSources);
 
 		context = as_retain([OpenALManager sharedInstance].currentContext);
+        if(context == nil)
+        {
+            OAL_LOG_ERROR(@"%@: Could not initialize channel: Context is nil", self);
+            goto initFailed;
+        }
 
 		sourcePool = [[ALSoundSourcePool alloc] init];
 
         for(int i = 0; i < reservedSources; i++)
         {
-            [self addSource:[ALSource source]];
+            [self addSource:nil];
         }            
 	}
 	return self;
+
+initFailed:
+    as_release(self);
+    return nil;
 }
 
 - (void) dealloc
@@ -495,7 +504,7 @@ SYNTHESIZE_DELEGATE_PROPERTY(reverbObstruction, ReverbObstruction, float);
         self.referenceDistance = defaultReferenceDistance;
         self.minGain = defaultMinGain;
         self.maxGain = defaultMaxGain;
-        // Disabled due to OpenAL default ConeOuterGain value issue
+        // Bug: Disabled due to OpenAL default ConeOuterGain value issue
         // self.coneOuterGain = defaultConeOuterGain;
         self.coneInnerAngle = defaultConeInnerAngle;
         self.coneOuterAngle = defaultConeOuterAngle;
@@ -517,6 +526,11 @@ SYNTHESIZE_DELEGATE_PROPERTY(reverbObstruction, ReverbObstruction, float);
         if(nil == source)
         {
             source = [ALSource source];
+            if(source == nil)
+            {
+                OAL_LOG_ERROR(@"%@: Could not create an OpenAL source", self);
+                return;
+            }
         }
         if(defaultsInitialized)
         {
@@ -527,7 +541,7 @@ SYNTHESIZE_DELEGATE_PROPERTY(reverbObstruction, ReverbObstruction, float);
             source.referenceDistance = referenceDistance;
             source.minGain = minGain;
             source.maxGain = maxGain;
-            // Disabled due to OpenAL default ConeOuterGain value issue
+            // Bug: Disabled due to OpenAL default ConeOuterGain value issue
             // source.coneOuterGain = coneOuterGain;
             source.coneInnerAngle = coneInnerAngle;
             source.coneOuterAngle = coneOuterAngle;

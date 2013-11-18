@@ -48,24 +48,27 @@
 {
 	if(nil != (self = [super init]))
 	{
-		OAL_LOG_DEBUG(@"%@: Init device %@", self, deviceSpecifier);
-
-		device = [ALWrapper openDevice:deviceSpecifier];
-		if(nil == device)
-		{
-			OAL_LOG_ERROR(@"%@: Failed to init device %@. Returning nil", self, deviceSpecifier);
-			as_release(self);
-			return nil;
-		}
-
 		suspendHandler = [[OALSuspendHandler alloc] initWithTarget:nil selector:nil];
 		
 		contexts = [NSMutableArray newMutableArrayUsingWeakReferencesWithCapacity:5];
 			
 		[[OpenALManager sharedInstance] notifyDeviceInitializing:self];
 		[[OpenALManager sharedInstance] addSuspendListener:self];
+		
+		OAL_LOG_DEBUG(@"%@: Init device %@", self, deviceSpecifier);
+		
+		device = [ALWrapper openDevice:deviceSpecifier];
+		if(nil == device)
+		{
+			OAL_LOG_ERROR(@"%@: Failed to create OpenAL device %@", self, deviceSpecifier);
+            goto initFailed;
+		}
 	}
 	return self;
+
+initFailed:
+    as_release(self);
+    return nil;
 }
 
 - (void) dealloc

@@ -109,9 +109,8 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
 
 		if(nil == contextIn)
 		{
-			OAL_LOG_ERROR(@"%@: Failed to init because context was nil. Returning nil", self);
-			as_release(self);
-			return nil;
+			OAL_LOG_ERROR(@"%@: Failed to init source: Context is nil", self);
+            goto initFailed;
 		}
 		
 		suspendHandler = [[OALSuspendHandler alloc] initWithTarget:self selector:@selector(setSuspended:)];
@@ -123,6 +122,11 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
 			ALContext* realContext = [OpenALManager sharedInstance].currentContext;
 			[OpenALManager sharedInstance].currentContext = context;
 			sourceId = [ALWrapper genSource];
+            if(sourceId == (ALuint)AL_INVALID)
+            {
+                OAL_LOG_ERROR(@"%@: Failed to create OpenAL source", self);
+                goto initFailed;
+            }
 			[OpenALManager sharedInstance].currentContext = realContext;
 		}
 		OAL_LOG_DEBUG(@"%@: Created source %08x", self, sourceId);
@@ -135,6 +139,10 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
         [[self class] notifySourceAllocated:self];
 	}
 	return self;
+
+initFailed:
+    as_release(self);
+    return nil;
 }
 
 - (void) dealloc
@@ -176,13 +184,10 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
     }
 
 	as_release(context);
+    as_release(buffer);
 
-	// In IOS 3.x, OpenAL doesn't stop playing right away.
-	// Release after a delay to give it some time to stop.
-#if !__has_feature(objc_arc)
-	[buffer performSelector:@selector(release) withObject:nil afterDelay:0.1];
-#endif
-	
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
 	as_superdealloc();
 }
 
@@ -206,12 +211,7 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
 			
 		[self stop];
 
-		// In IOS 3.x, OpenAL doesn't stop playing right away.
-		// Release after a delay to give it some time to stop.
-#if !__has_feature(objc_arc)
-		[buffer performSelector:@selector(release) withObject:nil afterDelay:0.1];
-#endif
-
+        as_release(buffer);
 		buffer = as_retain(value);
 		[ALWrapper sourcei:sourceId parameter:AL_BUFFER value:(ALint)buffer.bufferId];
 	}
@@ -353,11 +353,7 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
 	}
 }
 
-// Compiler bug?
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wimplicit-atomic-properties"
 @synthesize interruptible;
-#pragma clang diagnostic pop
 
 - (bool) looping
 {
@@ -751,7 +747,7 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
 {
 	OPTIONALLY_SYNCHRONIZED(self)
 	{
-		// Apple's OpenAL implementation is broken.
+		// Bug: Apple's OpenAL implementation is broken.
 		//return [ALWrapper getSourcei:sourceId parameter:AL_SOURCE_STATE];
 		
 		if(AL_INITIAL == shadowState || AL_STOPPED == shadowState)
@@ -903,7 +899,7 @@ static ALvoid alSourceNotification(ALuint sid, ALuint notificationID, ALvoid* us
 - (void) setInterrupted:(bool) value
 {
 #pragma unused(value)
-    // Suspending on interrupt fails in iOS 6+ and doesn't seem to be needed anyway
+    // Bug: Suspending on interrupt fails in iOS 6+ and doesn't seem to be needed anyway
 }
 
 - (bool) suspended

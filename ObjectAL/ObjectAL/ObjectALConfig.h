@@ -60,7 +60,7 @@
  * Recommended setting: 0 if you want to support iOS prior to 4.0, 1 if you don't care.
  */
 #ifndef OBJECTAL_CFG_USE_BLOCKS
-#define OBJECTAL_CFG_USE_BLOCKS 0
+#define OBJECTAL_CFG_USE_BLOCKS 1
 #endif
 
 

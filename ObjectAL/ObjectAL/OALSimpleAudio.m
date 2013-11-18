@@ -116,15 +116,29 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALSimpleAudio);
 		OAL_LOG_DEBUG(@"%@: Init with %d reserved sources, %d mono, %d stereo",
                       self, reservedSources, monoSources, stereoSources);
 		device = [[ALDevice alloc] initWithDeviceSpecifier:nil];
+        if(device == nil)
+		{
+			OAL_LOG_ERROR(@"%@: Could not create OpenAL device", self);
+            goto initFailed;
+		}
         context = [[ALContext alloc] initOnDevice:device
                                   outputFrequency:44100
                                  refreshIntervals:10
                                synchronousContext:FALSE
                                       monoSources:monoSources
                                     stereoSources:stereoSources];
+        if(context == nil)
+		{
+			OAL_LOG_ERROR(@"%@: Could not create OpenAL context", self);
+            goto initFailed;
+		}
         [self initCommon:reservedSources];
 	}
 	return self;
+
+initFailed:
+    as_release(self);
+    return nil;
 }
 
 - (id) initWithSources:(int) reservedSources
@@ -133,17 +147,34 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALSimpleAudio);
 	{
 		OAL_LOG_DEBUG(@"%@: Init with %d reserved sources", self, reservedSources);
 		device = [[ALDevice alloc] initWithDeviceSpecifier:nil];
+        if(device == nil)
+		{
+			OAL_LOG_ERROR(@"%@: Could not create OpenAL device", self);
+            goto initFailed;
+		}
         context = [[ALContext alloc] initOnDevice:device attributes:nil];
+        if(context == nil)
+		{
+			OAL_LOG_ERROR(@"%@: Could not create OpenAL contextself", self);
+            goto initFailed;
+		}
         [self initCommon:reservedSources];
 	}
 	return self;
+
+initFailed:
+    as_release(self);
+    return nil;
 }
 
 - (void) dealloc
 {
 	OAL_LOG_DEBUG(@"%@: Dealloc", self);
-#if NS_BLOCKS_AVAILABLE && OBJECTAL_CFG_USE_BLOCKS
-	dispatch_release(oal_dispatch_queue);
+#if NS_BLOCKS_AVAILABLE && OBJECTAL_CFG_USE_BLOCKS && !__has_feature(objc_arc)
+    if(oal_dispatch_queue != nil)
+    {
+        dispatch_release(oal_dispatch_queue);
+    }
 #endif
 
 	as_release(backgroundTrack);
@@ -538,9 +569,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALSimpleAudio);
 
 - (void) preloadEffects:(NSArray*) filePaths
            reduceToMono:(bool) reduceToMono
-		  progressBlock:(void (^)(uint progress, uint successCount, uint total)) progressBlock
+		  progressBlock:(void (^)(NSUInteger progress, NSUInteger successCount, NSUInteger total)) progressBlock
 {
-	uint total					= [filePaths count];
+	NSUInteger total = [filePaths count];
 	if(total < 1)
 	{
 		OAL_LOG_ERROR(@"Preload effects: No files to process");
@@ -548,9 +579,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALSimpleAudio);
 		return;
 	}
 
-	__block uint successCount	= 0;
+	__block NSUInteger successCount = 0;
 
-	pendingLoadCount			+= total;
+	pendingLoadCount += total;
 	dispatch_async(oal_dispatch_queue,
                    ^{
                        [filePaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
@@ -566,7 +597,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALSimpleAudio);
                             {
                                 successCount++;
                             }
-                            uint cnt = idx+1;
+                            NSUInteger cnt = idx+1;
                             dispatch_async(dispatch_get_main_queue(),
                                            ^{
                                                if(cnt == total)
