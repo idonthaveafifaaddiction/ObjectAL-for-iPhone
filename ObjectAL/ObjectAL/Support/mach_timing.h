@@ -15,4 +15,4 @@
  * @param startTime the earlier time value.
  * @return the time difference in seconds.
  */
-double mach_absolute_difference_seconds(uint64_t endTime, uint64_t startTime);
+extern double mach_absolute_difference_seconds(uint64_t endTime, uint64_t startTime);
