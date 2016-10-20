@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CBBAB311171D0B84009B955F"
-               BuildableName = "libObjectAL.a"
+               BlueprintIdentifier = "3563DEAA1DB8376F0025C21E"
+               BuildableName = "ObjectAL (iOS).framework"
                BlueprintName = "ObjectAL (iOS)"
                ReferencedContainer = "container:ObjectAL.xcodeproj">
             </BuildableReference>
@@ -45,8 +45,8 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CBBAB311171D0B84009B955F"
-            BuildableName = "libObjectAL.a"
+            BlueprintIdentifier = "3563DEAA1DB8376F0025C21E"
+            BuildableName = "ObjectAL (iOS).framework"
             BlueprintName = "ObjectAL (iOS)"
             ReferencedContainer = "container:ObjectAL.xcodeproj">
          </BuildableReference>
