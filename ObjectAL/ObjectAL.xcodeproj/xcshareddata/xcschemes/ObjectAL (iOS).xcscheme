@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3563DEAA1DB8376F0025C21E"
-               BuildableName = "ObjectAL (iOS).framework"
+               BuildableName = "ObjectAL.framework"
                BlueprintName = "ObjectAL (iOS)"
                ReferencedContainer = "container:ObjectAL.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3563DEAA1DB8376F0025C21E"
-            BuildableName = "ObjectAL (iOS).framework"
+            BuildableName = "ObjectAL.framework"
             BlueprintName = "ObjectAL (iOS)"
             ReferencedContainer = "container:ObjectAL.xcodeproj">
          </BuildableReference>

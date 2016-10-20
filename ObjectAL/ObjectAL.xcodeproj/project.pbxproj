@@ -17,7 +17,6 @@
 		3563DEBB1DB83E710025C21E /* ALCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB36B171D0C0E009B955F /* ALCaptureDevice.m */; };
 		3563DEBC1DB83E710025C21E /* ALContext.m in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB36F171D0C0E009B955F /* ALContext.m */; };
 		3563DEBD1DB83E710025C21E /* ALDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB371171D0C0E009B955F /* ALDevice.m */; };
-		3563DEBE1DB83E710025C21E /* ALListener.h in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB372171D0C0E009B955F /* ALListener.h */; };
 		3563DEBF1DB83E710025C21E /* ALListener.m in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB373171D0C0E009B955F /* ALListener.m */; };
 		3563DEC01DB83E710025C21E /* ALSoundSourcePool.m in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB376171D0C0E009B955F /* ALSoundSourcePool.m */; };
 		3563DEC11DB83E710025C21E /* OpenALManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CBBAB37D171D0C0E009B955F /* OpenALManager.m */; };
@@ -788,7 +787,6 @@
 				3563DEBC1DB83E710025C21E /* ALContext.m in Sources */,
 				3563DEBD1DB83E710025C21E /* ALDevice.m in Sources */,
 				3563DEF51DB840140025C21E /* ALSource.m in Sources */,
-				3563DEBE1DB83E710025C21E /* ALListener.h in Sources */,
 				3563DEBF1DB83E710025C21E /* ALListener.m in Sources */,
 				3563DEF21DB83FFC0025C21E /* ALChannelSource.m in Sources */,
 				3563DEC01DB83E710025C21E /* ALSoundSourcePool.m in Sources */,
@@ -797,8 +795,8 @@
 				3563DEC31DB83E710025C21E /* OALSuspendHandler.m in Sources */,
 				3563DEC41DB83E710025C21E /* mach_timing.c in Sources */,
 				3563DEEF1DB83F9E0025C21E /* OALAudioTrack.m in Sources */,
-				3563DEC51DB83E710025C21E /* NSMutableArray+WeakReferences.m in Sources */,
 				3563DEF31DB840020025C21E /* ALWrapper.m in Sources */,
+				3563DEC51DB83E710025C21E /* NSMutableArray+WeakReferences.m in Sources */,
 				3563DEC61DB83E710025C21E /* NSMutableDictionary+WeakReferences.m in Sources */,
 				3563DEC71DB83E710025C21E /* OALAudioFile.m in Sources */,
 				3563DEC81DB83E710025C21E /* OALTools.m in Sources */,
@@ -895,8 +893,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -933,8 +929,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1229,6 +1223,7 @@
 				3563DEB21DB8376F0025C21E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CB0C06D71C17640200297E1C /* Build configuration list for PBXNativeTarget "ObjectAL_TVOS" */ = {
 			isa = XCConfigurationList;
