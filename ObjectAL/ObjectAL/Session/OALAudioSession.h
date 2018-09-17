@@ -36,11 +36,7 @@
 /**
  * Handles the audio session and interrupts.
  */
-#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && !defined(__TV_OS_VERSION_MIN_REQUIRED)
-@interface OALAudioSession : NSObject <AVAudioSessionDelegate, OALSuspendManager>
-#else
 @interface OALAudioSession : NSObject <OALSuspendManager>
-#endif
 {
     /** The current audio session category */
 	NSString* audioSessionCategory;
@@ -136,12 +132,6 @@
  * Default value: YES
  */
 @property(nonatomic,readwrite,assign) bool handleInterruptions;
-
-#if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && !defined(__TV_OS_VERSION_MIN_REQUIRED)
-/** Delegate that will receive all audio session events (WEAK reference).
- */
-@property(nonatomic,readwrite,assign) id<AVAudioSessionDelegate> audioSessionDelegate;
-#endif
 
 /** If true, the audio session is active */
 @property(nonatomic,readwrite,assign) bool audioSessionActive;

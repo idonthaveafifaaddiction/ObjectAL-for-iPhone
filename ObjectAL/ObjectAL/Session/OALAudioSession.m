@@ -236,7 +236,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 }
 
 @synthesize handleInterruptions;
-@synthesize audioSessionDelegate;
 
 - (bool) honorSilentSwitch
 {
@@ -408,14 +407,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 		allowIpod = NO;
 		ipodDucking = NO;
 	}
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_3_1
-	else if([AVAudioSessionCategoryAudioProcessing isEqualToString:audioSessionCategory])
-	{
-		honorSilentSwitch = NO;
-		allowIpod = NO;
-		ipodDucking = NO;
-	}
-#endif /* __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_3_1 */
 	else
 	{
 		OAL_LOG_WARNING(@"%@: Unrecognized audio session category", audioSessionCategory);
@@ -629,128 +620,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 		}
 	}
 }
-
-
-#pragma mark Interrupt Handling
-
-// iOS 6.0+ interrupt handling
-- (void) handleInterruption:(NSNotification*) notification
-{
-    NSUInteger type = [[notification.userInfo objectForKey:@"AVAudioSessionInterruptionTypeKey"] unsignedIntegerValue];
-    OAL_LOG_DEBUG(@"iOS 6+ interrupt type %d", type);
-    switch(type)
-    {
-        case AVAudioSessionInterruptionTypeBegan:
-            [self beginInterruption];
-            break;
-        case AVAudioSessionInterruptionTypeEnded:
-        {
-            NSUInteger options = [[notification.userInfo objectForKey:@"AVAudioSessionInterruptionOptionKey"] unsignedIntegerValue];
-            [self endInterruptionWithFlags:options];
-            break;
-        }
-    }
-}
-
-
-// AVAudioSessionDelegate
-- (void) beginInterruption
-{
-	OAL_LOG_DEBUG(@"Received interrupt from system.");
-	@synchronized(self)
-	{
-		if(handleInterruptions)
-		{
-			self.interrupted = YES;
-		}
-		
-		if([audioSessionDelegate respondsToSelector:@selector(beginInterruption)])
-		{
-			[audioSessionDelegate beginInterruption];
-		}
-	}
-}
-
-- (void) endInterruption
-{
-	OAL_LOG_DEBUG(@"Received end interrupt from system.");
-	@synchronized(self)
-	{
-		bool informDelegate = YES;
-
-		if(handleInterruptions)
-		{
-			informDelegate = self.interrupted;
-			self.interrupted = NO;
-		}
-		
-		if(informDelegate)
-		{
-			if([audioSessionDelegate respondsToSelector:@selector(endInterruption)])
-			{
-				[audioSessionDelegate endInterruption];
-			}
-		}
-	}
-}
-
-- (void)endInterruptionWithFlags:(NSUInteger)flags
-{
-	OAL_LOG_DEBUG(@"Received end interrupt with flags 0x%08x from system.", flags);
-	@synchronized(self)
-	{
-		bool informDelegate = YES;
-		
-		if(handleInterruptions)
-		{
-			informDelegate = self.interrupted;
-			self.interrupted = NO;
-		}
-		
-		if(informDelegate)
-		{
-			if([audioSessionDelegate respondsToSelector:@selector(endInterruptionWithFlags:)])
-			{
-				[audioSessionDelegate endInterruptionWithFlags:flags];
-			}
-			else if([audioSessionDelegate respondsToSelector:@selector(endInterruption)])
-			{
-				[audioSessionDelegate endInterruption];
-			}
-		}
-	}
-}
-
-- (void) forceEndInterruption
-{
-	@synchronized(self)
-	{
-		bool informDelegate = YES;
-		
-		if(handleInterruptions)
-		{
-			informDelegate = self.interrupted;
-			self.interrupted = NO;
-		}
-		
-		if(informDelegate)
-		{
-			if([audioSessionDelegate respondsToSelector:@selector(endInterruption)])
-			{
-				[audioSessionDelegate endInterruption];
-			}
-		}
-	}
-}
-
-- (void)inputIsAvailableChanged:(BOOL)isInputAvailable
-{
-	if([audioSessionDelegate respondsToSelector:@selector(inputIsAvailableChanged:)])
-	{
-		[audioSessionDelegate inputIsAvailableChanged:isInputAvailable];
-	}
-}
-
 
 @end
 
