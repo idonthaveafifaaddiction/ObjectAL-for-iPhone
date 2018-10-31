@@ -28,9 +28,6 @@
 		context = [[ALContext contextOnDevice:device attributes:nil] retain];
 		[OpenALManager sharedInstance].currentContext = context;
 		
-		// Deal with interruptions for me!
-		[OALAudioSession sharedInstance].handleInterruptions = YES;
-		
 		// We don't want ipod music to keep playing since
 		// we have our own bg music.
 		[OALAudioSession sharedInstance].allowIpod = NO;
