@@ -47,8 +47,7 @@
      * another error notification broadcast.
      */
     bool handlingErrorNotification;
-	
-	bool handleInterruptions;
+
 	bool allowIpod;
 	bool ipodDucking;
 	bool useHardwareIfAvailable;
@@ -126,12 +125,6 @@
  * Default value: YES
  */
 @property(nonatomic,readwrite,assign) bool honorSilentSwitch;
-
-/** If true, automatically handle interruptions. <br>
- *
- * Default value: YES
- */
-@property(nonatomic,readwrite,assign) bool handleInterruptions;
 
 /** If true, the audio session is active */
 @property(nonatomic,readwrite,assign) bool audioSessionActive;

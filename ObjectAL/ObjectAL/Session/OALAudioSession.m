@@ -125,14 +125,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 
 		suspendHandler = [[OALSuspendHandler alloc] initWithTarget:self selector:@selector(setSuspended:)];
 
-        OAL_LOG_DEBUG(@"Adding notification observer for AVAudioSessionInterruptionNotification");
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleInterruption:)
-                                                     name:@"AVAudioSessionInterruptionNotification"
-                                                   object:[AVAudioSession sharedInstance]];
-
 		// Set up defaults
-		handleInterruptions = YES;
 		allowIpod = YES;
 		ipodDucking = NO;
 		useHardwareIfAvailable = YES;
@@ -234,8 +227,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 		[self setAudioMode];
 	}
 }
-
-@synthesize handleInterruptions;
 
 - (bool) honorSilentSwitch
 {
@@ -638,7 +629,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 		suspendHandler = [[OALSuspendHandler alloc] initWithTarget:self selector:@selector(setSuspended:)];
 
 		// Set up defaults
-		handleInterruptions = NO;
 		allowIpod = NO;
 		ipodDucking = NO;
 		useHardwareIfAvailable = YES;
@@ -664,7 +654,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(OALAudioSession);
 @synthesize allowIpod;
 @synthesize ipodDucking;
 @synthesize useHardwareIfAvailable;
-@synthesize handleInterruptions;
 @synthesize honorSilentSwitch;
 @synthesize preferredIOBufferDuration;
 @synthesize ipodPlaying;
