@@ -489,4 +489,9 @@ SYNTHESIZE_SINGLETON_FOR_CLASS_HEADER(OALSimpleAudio);
  */
 - (void) resetToDefault;
 
+#pragma mark Suspend
+
+- (void) suspendAudio;
+- (void) unsuspendAudio;
+
 @end
