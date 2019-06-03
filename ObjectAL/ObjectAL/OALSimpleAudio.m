@@ -32,6 +32,7 @@
 #import "ARCSafe_MemMgmt.h"
 #import "OALAudioSession.h"
 #import "OpenALManager.h"
+#import "ALWrapper.h"
 
 // By default, reserve all 32 sources.
 #define kDefaultReservedSources 32
@@ -735,6 +736,24 @@ initFailed:
 - (bool) suspended
 {
 	return [OALAudioSession sharedInstance].suspended;
+}
+
+#pragma mark Suspend
+
+- (void) suspendAudio {
+    ALContext *alContext = [OpenALManager sharedInstance].currentContext;
+    ALCcontext *alcContext = alContext.context;
+
+    [ALWrapper makeContextCurrent:nil];
+    [ALWrapper suspendContext:alcContext];
+}
+
+- (void) unsuspendAudio {
+    ALContext *alContext = [OpenALManager sharedInstance].currentContext;
+    ALCcontext *alcContext = alContext.context;
+
+    [ALWrapper makeContextCurrent:alcContext];
+    [ALWrapper processContext:alcContext];
 }
 
 
